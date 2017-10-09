@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -51,12 +52,47 @@ public class PersonServlet extends HttpServlet {
 			addFamilyMem(req,resp);
 			showFamilyList(req, resp);
 			break;
-		 
+		case "LOAD":
+			loadPerson(req, resp);
+			break;
+		case "UPDATE":
+			updateFamilyMem(req,resp);
+			showFamilyList(req, resp);
+			break;
+		case "DELETE":
+			delete(req, resp);
+			showFamilyList(req, resp);
+			break;
 		default:
 			showFamilyList(req, resp);
 		
 		}
 		
+	}
+
+	private void delete(HttpServletRequest req, HttpServletResponse resp) {
+		// TODO Auto-generated method stub
+		int id = Integer.parseInt(req.getParameter("personid"));
+		personUtils.deleteById(id);
+		
+	}
+
+	private void loadPerson(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("personid")) ;
+		System.out.println("id: "+id);
+		Person person = personUtils.getPerson(id);
+		
+		req.setAttribute("theCurrentPerson", person);
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/update-person.jsp");
+		dispatcher.forward(req, resp);
+		
+	}
+
+	private void updateFamilyMem(HttpServletRequest req, HttpServletResponse resp) {
+		int id = Integer.parseInt(req.getParameter("personid"));
+		System.out.println("id: "+id);
+		Person person = new Person(req.getParameter("firstname"),req.getParameter("lastname"),req.getParameter("email"));
+		personUtils.updateFamilyMem(id,person);			
 	}
 
 	private void addFamilyMem(HttpServletRequest req, HttpServletResponse resp) {

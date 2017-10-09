@@ -18,11 +18,19 @@
 	</tr>
 	
 		<c:forEach var = "temp" items = "${familyMem}">
+			<c:url var = "tempUpdate" value = "PersonServlet">
+				<c:param name = "command" value="LOAD"/>
+				<c:param name= "personid" value="${temp.id}"/>		
+			</c:url>
+			<c:url var = "tempDelete" value = "PersonServlet">
+				<c:param name = "command" value = "DELETE"/>
+				<c:param name = "personid" value = "${temp.id}"/>
+			</c:url>
 			<tr>
 				<td>${temp.firstName}</td>
 				<td>${temp.lastName}</td>
 				<td>${temp.email}</td>
-				<td><a href = "">UPDATE</a> | <a href = "">DELETE</a></td>
+				<td><a href = "${tempUpdate}">UPDATE</a> | <a href = "${tempDelete}">DELETE</a></td>
 			</tr>
 		</c:forEach>
  	
